@@ -63,3 +63,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.11221, -1.35352)
 UIScene = ExtResource("6_ftt8b")
 PanelSize = Vector2(1, 2)
 ResolutionScale = 512
+
+[connection signal="button_pressed" from="XROrigin3D/RightAim" to="XROrigin3D/RightAim/LaserPointer" method="OnButtonPressed"]
+[connection signal="button_released" from="XROrigin3D/RightAim" to="XROrigin3D/RightAim/LaserPointer" method="OnButtonReleased"]

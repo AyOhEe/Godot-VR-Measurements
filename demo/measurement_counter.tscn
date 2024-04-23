@@ -1,0 +1,46 @@
+[gd_scene load_steps=4 format=3 uid="uid://cdnlhsddm2t0x"]
+
+[ext_resource type="Script" path="res://addons/Godot-VR-Measurements/demo/measurement_counter.gd" id="1_leo07"]
+[ext_resource type="Theme" uid="uid://cjvj2l1cav6i3" path="res://addons/Godot-VR-Measurements/demo/theme.tres" id="2_3hmrg"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_brwjm"]
+bg_color = Color(0.0705332, 0.0705331, 0.070533, 1)
+
+[node name="MeasurementCounter" type="Panel"]
+custom_minimum_size = Vector2(0, 50)
+theme_override_styles/panel = SubResource("StyleBoxFlat_brwjm")
+script = ExtResource("1_leo07")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="Decrement" type="Button" parent="HBoxContainer"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+size_flags_horizontal = 2
+theme = ExtResource("2_3hmrg")
+text = "-"
+
+[node name="Label" type="Label" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "Player height:  "
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Increment" type="Button" parent="HBoxContainer"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+size_flags_horizontal = 10
+theme = ExtResource("2_3hmrg")
+text = "+"
+
+[connection signal="button_down" from="HBoxContainer/Decrement" to="." method="decrement"]
+[connection signal="button_down" from="HBoxContainer/Increment" to="." method="increment"]

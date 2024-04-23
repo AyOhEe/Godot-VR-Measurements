@@ -1,4 +1,6 @@
-[gd_scene load_steps=2 format=3 uid="uid://j8qpu2c68gyt"]
+[gd_scene load_steps=3 format=3 uid="uid://j8qpu2c68gyt"]
+
+[ext_resource type="PackedScene" uid="uid://cdnlhsddm2t0x" path="res://addons/Godot-VR-Measurements/demo/measurement_counter.tscn" id="1_k2y6l"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_w0lms"]
 font_size = 32
@@ -28,6 +30,81 @@ horizontal_alignment = 1
 [node name="HSeparator" type="HSeparator" parent="VBoxContainer"]
 layout_mode = 2
 
-[node name="Panel" type="Panel" parent="VBoxContainer"]
-custom_minimum_size = Vector2(0, 50)
+[node name="MeasurementCounter" parent="VBoxContainer" instance=ExtResource("1_k2y6l")]
 layout_mode = 2
+property_name = &"PlayerHeight"
+delta = 0.01
+
+[node name="MeasurementCounter2" parent="VBoxContainer" instance=ExtResource("1_k2y6l")]
+layout_mode = 2
+property_name = &"TrackedOffset"
+delta = 0.01
+
+[node name="MeasurementCounter3" parent="VBoxContainer" instance=ExtResource("1_k2y6l")]
+layout_mode = 2
+property_name = &"Armspan"
+delta = 0.01
+
+[node name="HSeparator2" type="HSeparator" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="MeasurementCounter4" parent="VBoxContainer" instance=ExtResource("1_k2y6l")]
+layout_mode = 2
+property_name = &"Spine"
+delta = 0.01
+
+[node name="MeasurementCounter5" parent="VBoxContainer" instance=ExtResource("1_k2y6l")]
+layout_mode = 2
+property_name = &"Thigh"
+delta = 0.01
+
+[node name="MeasurementCounter6" parent="VBoxContainer" instance=ExtResource("1_k2y6l")]
+layout_mode = 2
+property_name = &"Shin"
+delta = 0.01
+
+[node name="MeasurementCounter7" parent="VBoxContainer" instance=ExtResource("1_k2y6l")]
+layout_mode = 2
+property_name = &"Inseam"
+delta = 0.01
+
+[node name="HSeparator3" type="HSeparator" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="MeasurementCounter8" parent="VBoxContainer" instance=ExtResource("1_k2y6l")]
+layout_mode = 2
+property_name = &"Clavicle"
+delta = 0.01
+
+[node name="MeasurementCounter9" parent="VBoxContainer" instance=ExtResource("1_k2y6l")]
+layout_mode = 2
+property_name = &"Arm"
+delta = 0.01
+
+[node name="MeasurementCounter10" parent="VBoxContainer" instance=ExtResource("1_k2y6l")]
+layout_mode = 2
+property_name = &"Forearm"
+delta = 0.01
+
+[node name="HSeparator4" type="HSeparator" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="MeasurementCounter11" parent="VBoxContainer" instance=ExtResource("1_k2y6l")]
+layout_mode = 2
+property_name = &"Hips"
+delta = 0.01
+
+[node name="MeasurementCounter12" parent="VBoxContainer" instance=ExtResource("1_k2y6l")]
+layout_mode = 2
+property_name = &"Waist"
+delta = 0.01
+
+[node name="MeasurementCounter13" parent="VBoxContainer" instance=ExtResource("1_k2y6l")]
+layout_mode = 2
+property_name = &"Underbust"
+delta = 0.01
+
+[node name="MeasurementCounter14" parent="VBoxContainer" instance=ExtResource("1_k2y6l")]
+layout_mode = 2
+property_name = &"Chest"
+delta = 0.01
