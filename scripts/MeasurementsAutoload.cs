@@ -1,6 +1,5 @@
 using Godot;
 using System;
-using System.Reflection.Metadata.Ecma335;
 
 public partial class MeasurementsAutoload : Node
 {
@@ -263,7 +262,6 @@ public partial class MeasurementsAutoload : Node
 
         public static float Chest(MeasurementsAutoload measurements)
         {
-            GD.Print("Chest estimator called");
             switch (measurements.BuildType)
             {
                 case UserBuildType.Masculine:
