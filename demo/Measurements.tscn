@@ -1,11 +1,10 @@
-[gd_scene load_steps=10 format=3 uid="uid://ddoroi25yl6ok"]
+[gd_scene load_steps=9 format=3 uid="uid://ddoroi25yl6ok"]
 
 [ext_resource type="PackedScene" uid="uid://dwqd3nqutpp6t" path="res://addons/Godot-Extras/Environments/SceneLight.tscn" id="1_qrf6q"]
 [ext_resource type="PackedScene" uid="uid://njve3qkkacgy" path="res://addons/Godot-Extras/Environments/WorldEnvironment.tscn" id="2_fvpa0"]
 [ext_resource type="PackedScene" uid="uid://ta178svgkj7b" path="res://addons/Godot-Extras/Axis Helper/Axis Helper.tscn" id="3_fbgpi"]
-[ext_resource type="Script" path="res://addons/Godot-VR-UI/scripts/UseXR.cs" id="3_mjufm"]
+[ext_resource type="PackedScene" uid="uid://dod2lkyk6cwv8" path="res://addons/Godot-VR-UI/scenes/UICameraRig.tscn" id="3_jei7o"]
 [ext_resource type="PackedScene" uid="uid://b3elqexfi5rb0" path="res://addons/Godot-VR-UI/scenes/ui_panel.tscn" id="3_uvsg2"]
-[ext_resource type="Script" path="res://addons/Godot-VR-UI/scripts/LaserPointer.cs" id="4_vvhjx"]
 [ext_resource type="PackedScene" uid="uid://j8qpu2c68gyt" path="res://addons/Godot-VR-Measurements/demo/MeasurementsUI.tscn" id="6_ftt8b"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hr418"]
@@ -21,42 +20,18 @@ size = Vector2(5, 5)
 
 [node name="WorldEnvironment" parent="." instance=ExtResource("2_fvpa0")]
 
-[node name="XROrigin3D" type="XROrigin3D" parent="."]
-script = ExtResource("3_mjufm")
-
-[node name="XRCamera3D" type="XRCamera3D" parent="XROrigin3D"]
-
-[node name="LeftHand" type="XRController3D" parent="XROrigin3D"]
-tracker = &"left_hand"
-
-[node name="Axis Helper" parent="XROrigin3D/LeftHand" instance=ExtResource("3_fbgpi")]
-transform = Transform3D(0.05, 0, 0, 0, 0.05, 0, 0, 0, 0.05, 0, 0, 0)
-
-[node name="RightHand" type="XRController3D" parent="XROrigin3D"]
-tracker = &"right_hand"
-
-[node name="Axis Helper" parent="XROrigin3D/RightHand" instance=ExtResource("3_fbgpi")]
-transform = Transform3D(0.05, 0, 0, 0, 0.05, 0, 0, 0, 0.05, 0, 0, 0)
-
-[node name="LeftAim" type="XRController3D" parent="XROrigin3D"]
-tracker = &"left_hand"
-pose = &"aim"
-
-[node name="RightAim" type="XRController3D" parent="XROrigin3D"]
-tracker = &"right_hand"
-pose = &"aim"
-
-[node name="Axis Helper" parent="XROrigin3D/RightAim" instance=ExtResource("3_fbgpi")]
-transform = Transform3D(0.05, 0, 0, 0, 0.05, 0, 0, 0, 0.05, 0, 0, 0)
-
-[node name="LaserPointer" type="RayCast3D" parent="XROrigin3D/RightAim"]
-target_position = Vector3(0, 0, -5)
-collision_mask = 256
-script = ExtResource("4_vvhjx")
-Reticle = ExtResource("3_fbgpi")
-
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 mesh = SubResource("PlaneMesh_em4ts")
+
+[node name="UICameraRig" parent="." instance=ExtResource("3_jei7o")]
+
+[node name="UIPointer" parent="UICameraRig/LeftAim" index="0"]
+UseReticle = true
+Reticle = ExtResource("3_fbgpi")
+
+[node name="UIPointer" parent="UICameraRig/RightAim" index="0"]
+UseReticle = true
+Reticle = ExtResource("3_fbgpi")
 
 [node name="ui_panel" parent="." instance=ExtResource("3_uvsg2")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.11221, -1.35352)
@@ -64,5 +39,4 @@ UIScene = ExtResource("6_ftt8b")
 PanelSize = Vector2(1, 2)
 ResolutionScale = 512
 
-[connection signal="button_pressed" from="XROrigin3D/RightAim" to="XROrigin3D/RightAim/LaserPointer" method="OnButtonPressed"]
-[connection signal="button_released" from="XROrigin3D/RightAim" to="XROrigin3D/RightAim/LaserPointer" method="OnButtonReleased"]
+[editable path="UICameraRig"]
