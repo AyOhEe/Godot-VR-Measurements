@@ -1,46 +1,11 @@
 using Godot;
 using System;
 
+
 public partial class MeasurementsAutoload : Node
 {
     const string MEASUREMENTS_CONFIG_PATH = "user://user_measurements.cfg";
-    public enum UserBuildType
-    {
-        Masculine,
-        Feminine,
-        Androgynous,
-    }
-
-    /*-----STATIC VARIABLES-----*/
-    private static MeasurementsAutoload _Instance;
-
-    public static float PlayerHeight { get { return _Instance._PlayerHeight; } set { _Instance._PlayerHeight = value; } }
-    //corrective factor for spatial tracking
-    public static float TrackedOffset { get { return _Instance._TrackedOffset; } set { _Instance._TrackedOffset = value; } }
-    public static float Armspan { get { return _Instance._Armspan; } set { _Instance._Armspan = value; } }
-    //body type of user
-    public static UserBuildType BuildType { get { return _Instance._BuildType; } set { _Instance._BuildType = value; } }
-
-
-    public static float Spine { get { return _Instance._Spine; } set { _Instance._Spine = value; } }
-    public static float Thigh { get { return _Instance._Thigh; } set { _Instance._Thigh = value; } }
-    public static float Shin { get { return _Instance._Shin; } set { _Instance._Shin = value; } }
-    public static float Inseam { get { return _Instance._Inseam; } set { _Instance._Inseam = value; } }
-
-
-    public static float Clavicle { get { return _Instance._Clavicle; } set { _Instance._Clavicle = value; } }
-    public static float Arm { get { return _Instance._Arm; } set { _Instance._Arm = value; } }
-    public static float Forearm { get { return _Instance._Forearm; } set { _Instance._Forearm = value; } }
-
-
-    public static float Waist { get { return _Instance._Waist; } set { _Instance._Waist = value; } }
-    public static float Hips { get { return _Instance._Hips; } set { _Instance._Hips = value; } }
-    public static float Underbust { get { return _Instance._Underbust; } set { _Instance._Underbust = value; } }
-    public static float Chest { get { return _Instance._Chest; } set { _Instance._Chest = value; } }
-
-
-    public static Vector3 TrackedOffsetVector => _Instance._TrackedOffsetVector;
-
+    
 
     /*-----INSTANCE VARIABLES-----*/
     [Signal] public delegate void MeasurementsChangeEventHandler();
@@ -52,7 +17,7 @@ public partial class MeasurementsAutoload : Node
     [Export] private float _TrackedOffset;
     [Export] private float _Armspan;
     //body type of user
-    [Export] private UserBuildType _BuildType;
+    [Export] private VRUserMeasurements.UserBuildType _BuildType;
 
 
     [ExportCategory("Vertical sections")]
@@ -75,25 +40,100 @@ public partial class MeasurementsAutoload : Node
     [Export] private float _Chest;
 
 
+    //the following code is ugly, but enables catching measurement change events from GDScript
+    //i'm frankly okay with this as it stands, but a cleaner implementation would be nice...
+    public float PlayerHeight
+    {
+        get { return _PlayerHeight; }
+        set { _PlayerHeight = value; EmitMeasurementsChange(); }
+    }
+    public float TrackedOffset
+    {
+        get { return _TrackedOffset; }
+        set { _TrackedOffset = value; EmitMeasurementsChange(); }
+    }
+    public float Armspan
+    {
+        get { return _Armspan; }
+        set { _Armspan = value; EmitMeasurementsChange(); }
+    }
+    public VRUserMeasurements.UserBuildType BuildType
+    {
+        get { return _BuildType; }
+        set { _BuildType = value; EmitMeasurementsChange(); }
+    }
+
+
+    public float Spine
+    {
+        get { return _Spine; }
+        set { _Spine = value; EmitMeasurementsChange(); }
+    }
+    public float Thigh
+    {
+        get { return _Thigh; }
+        set { _Thigh = value; EmitMeasurementsChange(); }
+    }
+    public float Shin
+    {
+        get { return _Shin; }
+        set { _Shin = value; EmitMeasurementsChange(); }
+    }
+    public float Inseam
+    {
+        get { return _Inseam; }
+        set { _Inseam = value; EmitMeasurementsChange(); }
+    }
+
+
+    public float Clavicle
+    {
+        get { return _Clavicle; }
+        set { _Clavicle = value; EmitMeasurementsChange(); }
+    }
+    public float Arm
+    {
+        get { return _Arm; }
+        set { _Arm = value; EmitMeasurementsChange(); }
+    }
+    public float Forearm
+    {
+        get { return _Forearm; }
+        set { _Forearm = value; EmitMeasurementsChange(); }
+    }
+
+
+    public float Waist
+    {
+        get { return _Waist; }
+        set { _Waist = value; EmitMeasurementsChange(); }
+    }
+    public float Hips
+    {
+        get { return _Hips; }
+        set { _Hips = value; EmitMeasurementsChange(); }
+    }
+    public float Underbust
+    {
+        get { return _Underbust; }
+        set { _Underbust = value; EmitMeasurementsChange(); }
+    }
+    public float Chest
+    {
+        get { return _Chest; }
+        set { _Chest = value; EmitMeasurementsChange(); }
+    }
+
+
     //corrective factor for spatial tracking
     //TrackedPosition + TrackedOffsetVector = location of tracker relative to their actual floor
-    private Vector3 _TrackedOffsetVector { get { return Vector3.Up * _TrackedOffset; } }
+    public Vector3 TrackedOffsetVector { get { return Vector3.Up * TrackedOffset; } }
+
 
 
     public override void _EnterTree()
     {
-        //prevent two instances of this script existing
-        if(_Instance == null)
-        {
-            _Instance = this;
-        }
-        else
-        {
-            //Dangerous! If two MeasurementsAutoloads are registered as autoloads,
-            //  this *WILL* crash the game before it can even start!
-            QueueFree();
-        }
-
+        VRUserMeasurements.Register(this);
         LoadMeasurements();
     }
 
@@ -109,27 +149,29 @@ public partial class MeasurementsAutoload : Node
         }
 
         //naive estimations
-        _PlayerHeight = (float)configFile.GetValue("Measurements", "PlayerHeight", Estimations.PlayerHeight(this));
-        _TrackedOffset = (float)configFile.GetValue("Measurements", "TrackedOffset", Estimations.TrackedOffset(this));
-        _Armspan = (float)configFile.GetValue("Measurements", "Armspan", Estimations.Armspan(this));
-        _BuildType = (UserBuildType)(int)configFile.GetValue("Measurements", "BuildType", (int)UserBuildType.Androgynous);
+        PlayerHeight = (float)configFile.GetValue("Measurements", "PlayerHeight", Estimations.PlayerHeight(this));
+        TrackedOffset = (float)configFile.GetValue("Measurements", "TrackedOffset", Estimations.TrackedOffset(this));
+        Armspan = (float)configFile.GetValue("Measurements", "Armspan", Estimations.Armspan(this));
+        BuildType = (VRUserMeasurements.UserBuildType)(int)configFile.GetValue("Measurements", "BuildType", (int)VRUserMeasurements.UserBuildType.Androgynous);
 
         //vertical sections
-        _Spine = (float)configFile.GetValue("Measurements", "Spine", Estimations.Spine(this));
-        _Thigh = (float)configFile.GetValue("Measurements", "Thigh", Estimations.Thigh(this));
-        _Shin = (float)configFile.GetValue("Measurements", "Shin", Estimations.Shin(this));
-        _Inseam = (float)configFile.GetValue("Measurements", "Inseam", Estimations.Inseam(this));
+        Spine = (float)configFile.GetValue("Measurements", "Spine", Estimations.Spine(this));
+        Thigh = (float)configFile.GetValue("Measurements", "Thigh", Estimations.Thigh(this));
+        Shin = (float)configFile.GetValue("Measurements", "Shin", Estimations.Shin(this));
+        Inseam = (float)configFile.GetValue("Measurements", "Inseam", Estimations.Inseam(this));
 
         //upper body
-        _Clavicle = (float)configFile.GetValue("Measurements", "Clavicle", Estimations.Clavicle(this));
-        _Arm = (float)configFile.GetValue("Measurements", "Arm", Estimations.Arm(this));
-        _Forearm = (float)configFile.GetValue("Measurements", "Forearm", Estimations.Forearm(this));
+        Clavicle = (float)configFile.GetValue("Measurements", "Clavicle", Estimations.Clavicle(this));
+        Arm = (float)configFile.GetValue("Measurements", "Arm", Estimations.Arm(this));
+        Forearm = (float)configFile.GetValue("Measurements", "Forearm", Estimations.Forearm(this));
 
         //core measurements
-        _Hips = (float)configFile.GetValue("Measurements", "Hips", Estimations.Hips(this));
-        _Waist = (float)configFile.GetValue("Measurements", "Waist", Estimations.Waist(this));
-        _Underbust = (float)configFile.GetValue("Measurements", "Underbust", Estimations.Underbust(this));
-        _Chest = (float)configFile.GetValue("Measurements", "Chest", Estimations.Chest(this));
+        Hips = (float)configFile.GetValue("Measurements", "Hips", Estimations.Hips(this));
+        Waist = (float)configFile.GetValue("Measurements", "Waist", Estimations.Waist(this));
+        Underbust = (float)configFile.GetValue("Measurements", "Underbust", Estimations.Underbust(this));
+        Chest = (float)configFile.GetValue("Measurements", "Chest", Estimations.Chest(this));
+
+        EmitMeasurementsChange();
     }
 
     private void CreateConfigIfMissing()
@@ -174,29 +216,34 @@ public partial class MeasurementsAutoload : Node
         }
 
         //naive estimations
-        configFile.SetValue("Measurements", "PlayerHeight", _PlayerHeight);
-        configFile.SetValue("Measurements", "TrackedOffset", _TrackedOffset);
-        configFile.SetValue("Measurements", "Armspan", _Armspan);
-        configFile.SetValue("Measurements", "BuildType", (int)_BuildType);
+        configFile.SetValue("Measurements", "PlayerHeight", PlayerHeight);
+        configFile.SetValue("Measurements", "TrackedOffset", TrackedOffset);
+        configFile.SetValue("Measurements", "Armspan", Armspan);
+        configFile.SetValue("Measurements", "BuildType", (int)BuildType);
 
         //vertical sections
-        configFile.SetValue("Measurements", "Spine", _Spine);
-        configFile.SetValue("Measurements", "Thigh", _Thigh);
-        configFile.SetValue("Measurements", "Shin", _Shin);
-        configFile.SetValue("Measurements", "Inseam", _Inseam);
+        configFile.SetValue("Measurements", "Spine", Spine);
+        configFile.SetValue("Measurements", "Thigh", Thigh);
+        configFile.SetValue("Measurements", "Shin", Shin);
+        configFile.SetValue("Measurements", "Inseam", Inseam);
 
         //upper body
-        configFile.SetValue("Measurements", "Clavicle", _Clavicle);
-        configFile.SetValue("Measurements", "Arm", _Arm);
-        configFile.SetValue("Measurements", "Forearm", _Forearm);
+        configFile.SetValue("Measurements", "Clavicle", Clavicle);
+        configFile.SetValue("Measurements", "Arm", Arm);
+        configFile.SetValue("Measurements", "Forearm", Forearm);
 
         //core measurements
-        configFile.SetValue("Measurements", "Hips", _Hips);
-        configFile.SetValue("Measurements", "Waist", _Waist);
-        configFile.SetValue("Measurements", "Chest", _Chest);
-        configFile.SetValue("Measurements", "Underbust", _Underbust);
+        configFile.SetValue("Measurements", "Hips", Hips);
+        configFile.SetValue("Measurements", "Waist", Waist);
+        configFile.SetValue("Measurements", "Chest", Chest);
+        configFile.SetValue("Measurements", "Underbust", Underbust);
 
         configFile.Save(MEASUREMENTS_CONFIG_PATH);
+    }
+
+    public void EmitMeasurementsChange()
+    {
+        EmitSignal(SignalName.MeasurementsChange);
     }
 
     public override void _ExitTree()
@@ -226,97 +273,97 @@ public partial class MeasurementsAutoload : Node
 
         public static float Armspan(MeasurementsAutoload measurements)
         {
-            return measurements._PlayerHeight;
+            return measurements.PlayerHeight;
         }
 
-        public static UserBuildType BuildType(MeasurementsAutoload measurements)
+        public static VRUserMeasurements.UserBuildType BuildType(MeasurementsAutoload measurements)
         {
-            return UserBuildType.Androgynous;
+            return VRUserMeasurements.UserBuildType.Androgynous;
         }
         #endregion
         #region Vertical sections
         public static float Spine(MeasurementsAutoload measurements)
         {
-            return measurements._PlayerHeight * 0.33f;
+            return measurements.PlayerHeight * 0.33f;
         }
 
         public static float Thigh(MeasurementsAutoload measurements)
         {
-            return measurements._PlayerHeight * 0.3f;
+            return measurements.PlayerHeight * 0.3f;
         }
 
         public static float Shin(MeasurementsAutoload measurements)
         {
-            return measurements._Thigh * 0.76f;
+            return measurements.Thigh * 0.76f;
         }
 
         public static float Inseam(MeasurementsAutoload measurements)
         {
-            return measurements._Thigh + measurements._Shin;
+            return measurements.Thigh + measurements.Shin;
         }
         #endregion
         #region Upper body
         public static float Clavicle(MeasurementsAutoload measurements)
         {
-            return measurements._Armspan * 0.1f;
+            return measurements.Armspan * 0.1f;
         }
 
         public static float Arm(MeasurementsAutoload measurements)
         {
-            return measurements._Clavicle * 1.45f;
+            return measurements.Clavicle * 1.45f;
         }
 
         public static float Forearm(MeasurementsAutoload measurements)
         {
-            return measurements._Clavicle * 1.4f;
+            return measurements.Clavicle * 1.4f;
         }
         #endregion
         #region core measurements
         public static float Hips(MeasurementsAutoload measurements)
         {
             //my source is that i made it the fuck up
-            switch (measurements._BuildType)
+            switch (measurements.BuildType)
             {
-                case UserBuildType.Masculine:
-                    return measurements._PlayerHeight * 0.5f;
-                case UserBuildType.Feminine:
-                    return measurements._PlayerHeight * 0.55f;
-                case UserBuildType.Androgynous:
-                    return measurements._PlayerHeight * 0.525f;
+                case VRUserMeasurements.UserBuildType.Masculine:
+                    return measurements.PlayerHeight * 0.5f;
+                case VRUserMeasurements.UserBuildType.Feminine:
+                    return measurements.PlayerHeight * 0.55f;
+                case VRUserMeasurements.UserBuildType.Androgynous:
+                    return measurements.PlayerHeight * 0.525f;
             }
-            return measurements._PlayerHeight * 0.525f;
+            return measurements.PlayerHeight * 0.525f;
         }
 
         public static float Waist(MeasurementsAutoload measurements)
         {
-            switch (measurements._BuildType)
+            switch (measurements.BuildType)
             {
-                case UserBuildType.Masculine:
-                    return measurements._Hips;
-                case UserBuildType.Feminine:
-                    return measurements._Hips * 0.8f;
-                case UserBuildType.Androgynous:
-                    return measurements._Hips * 0.95f;
+                case VRUserMeasurements.UserBuildType.Masculine:
+                    return measurements.Hips;
+                case VRUserMeasurements.UserBuildType.Feminine:
+                    return measurements.Hips * 0.8f;
+                case VRUserMeasurements.UserBuildType.Androgynous:
+                    return measurements.Hips * 0.95f;
             }
-            return measurements._Hips * 0.95f;
+            return measurements.Hips * 0.95f;
         }
 
         public static float Underbust(MeasurementsAutoload measurements)
         {
-            return (measurements._Hips + measurements._Waist) / 2;
+            return (measurements.Hips + measurements.Waist) / 2;
         }
 
         public static float Chest(MeasurementsAutoload measurements)
         {
-            switch (measurements._BuildType)
+            switch (measurements.BuildType)
             {
-                case UserBuildType.Masculine:
-                case UserBuildType.Androgynous:
-                    return measurements._Underbust;
-                case UserBuildType.Feminine:
-                    return measurements._Underbust + 0.11f;
+                case VRUserMeasurements.UserBuildType.Masculine:
+                case VRUserMeasurements.UserBuildType.Androgynous:
+                    return measurements.Underbust;
+                case VRUserMeasurements.UserBuildType.Feminine:
+                    return measurements.Underbust + 0.11f;
             }
-            return measurements._Underbust;
+            return measurements.Underbust;
         }
 
         #endregion

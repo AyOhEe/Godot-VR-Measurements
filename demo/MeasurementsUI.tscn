@@ -32,17 +32,17 @@ layout_mode = 2
 
 [node name="MeasurementCounter" parent="VBoxContainer" instance=ExtResource("1_k2y6l")]
 layout_mode = 2
-property_name = &"_PlayerHeight"
+property_name = &"PlayerHeight"
 delta = 0.01
 
 [node name="MeasurementCounter2" parent="VBoxContainer" instance=ExtResource("1_k2y6l")]
 layout_mode = 2
-property_name = &"_TrackedOffset"
+property_name = &"TrackedOffset"
 delta = 0.01
 
 [node name="MeasurementCounter3" parent="VBoxContainer" instance=ExtResource("1_k2y6l")]
 layout_mode = 2
-property_name = &"_Armspan"
+property_name = &"Armspan"
 delta = 0.01
 
 [node name="HSeparator2" type="HSeparator" parent="VBoxContainer"]
@@ -50,22 +50,22 @@ layout_mode = 2
 
 [node name="MeasurementCounter4" parent="VBoxContainer" instance=ExtResource("1_k2y6l")]
 layout_mode = 2
-property_name = &"_Spine"
+property_name = &"Spine"
 delta = 0.01
 
 [node name="MeasurementCounter5" parent="VBoxContainer" instance=ExtResource("1_k2y6l")]
 layout_mode = 2
-property_name = &"_Thigh"
+property_name = &"Thigh"
 delta = 0.01
 
 [node name="MeasurementCounter6" parent="VBoxContainer" instance=ExtResource("1_k2y6l")]
 layout_mode = 2
-property_name = &"_Shin"
+property_name = &"Shin"
 delta = 0.01
 
 [node name="MeasurementCounter7" parent="VBoxContainer" instance=ExtResource("1_k2y6l")]
 layout_mode = 2
-property_name = &"_Inseam"
+property_name = &"Inseam"
 delta = 0.01
 
 [node name="HSeparator3" type="HSeparator" parent="VBoxContainer"]
@@ -73,17 +73,17 @@ layout_mode = 2
 
 [node name="MeasurementCounter8" parent="VBoxContainer" instance=ExtResource("1_k2y6l")]
 layout_mode = 2
-property_name = &"_Clavicle"
+property_name = &"Clavicle"
 delta = 0.01
 
 [node name="MeasurementCounter9" parent="VBoxContainer" instance=ExtResource("1_k2y6l")]
 layout_mode = 2
-property_name = &"_Arm"
+property_name = &"Arm"
 delta = 0.01
 
 [node name="MeasurementCounter10" parent="VBoxContainer" instance=ExtResource("1_k2y6l")]
 layout_mode = 2
-property_name = &"_Forearm"
+property_name = &"Forearm"
 delta = 0.01
 
 [node name="HSeparator4" type="HSeparator" parent="VBoxContainer"]
@@ -91,20 +91,20 @@ layout_mode = 2
 
 [node name="MeasurementCounter11" parent="VBoxContainer" instance=ExtResource("1_k2y6l")]
 layout_mode = 2
-property_name = &"_Hips"
+property_name = &"Hips"
 delta = 0.01
 
 [node name="MeasurementCounter12" parent="VBoxContainer" instance=ExtResource("1_k2y6l")]
 layout_mode = 2
-property_name = &"_Waist"
+property_name = &"Waist"
 delta = 0.01
 
 [node name="MeasurementCounter13" parent="VBoxContainer" instance=ExtResource("1_k2y6l")]
 layout_mode = 2
-property_name = &"_Underbust"
+property_name = &"Underbust"
 delta = 0.01
 
 [node name="MeasurementCounter14" parent="VBoxContainer" instance=ExtResource("1_k2y6l")]
 layout_mode = 2
-property_name = &"_Chest"
+property_name = &"Chest"
 delta = 0.01
