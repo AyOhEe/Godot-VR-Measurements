@@ -1,0 +1,7 @@
+[gd_scene load_steps=3 format=3 uid="uid://kn5xfli5tkhx"]
+
+[ext_resource type="PackedScene" uid="uid://dod2lkyk6cwv8" path="res://addons/Godot-VR-UI/scenes/UICameraRig.tscn" id="1_mow37"]
+[ext_resource type="Script" path="res://addons/Godot-VR-Measurements/scripts/CorrectedCameraRig.cs" id="2_ixmvp"]
+
+[node name="UICorrectedCameraRig" instance=ExtResource("1_mow37")]
+script = ExtResource("2_ixmvp")

@@ -8,19 +8,22 @@ var delta: float
 
 var label: Label
 
-func _ready():
+func _enter_tree():
 	label = $HBoxContainer/Label
 	update_label()
+	
+	VRUserMeasurements.MeasurementsChange.connect(Callable(self, "update_label"))
+	
+func _exit_tree():
+	VRUserMeasurements.MeasurementsChange.disconnect(Callable(self, "update_label"))
 
 func increment():
 	var measurement: float = VRUserMeasurements.get(property_name)
 	VRUserMeasurements.set(property_name, measurement + delta)
-	update_label()
 	
 func decrement():
 	var measurement: float = VRUserMeasurements.get(property_name)
 	VRUserMeasurements.set(property_name, measurement - delta)
-	update_label()
 
 func update_label():
 	var measurement: float = VRUserMeasurements.get(property_name)
